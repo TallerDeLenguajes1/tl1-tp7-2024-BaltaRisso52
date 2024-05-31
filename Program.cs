@@ -1,91 +1,56 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using EspacioCalculadora;
-
-Console.WriteLine("Hello, World!");
-bool continuar = true;
-var prueba = new Calculadora();
-
-while (continuar)
+using System.Globalization;
+using Empleados;
+Empleado[] arreglo = new Empleado[2];
+for (int i = 0; i < arreglo.Length; i++)
 {
-
-    Console.WriteLine($"Actual Resultado: {prueba.Resultado}");
-    Console.WriteLine("-----MENU DE CALCULADORA-----");
-    Console.WriteLine("1.Sumar");
-    Console.WriteLine("2.Restar");
-    Console.WriteLine("3.Multiplicar");
-    Console.WriteLine("4.Dividir (nro distinto a 0)");
-    Console.WriteLine("5.Limpiar");
-    Console.WriteLine("6.Salir");
-    Console.Write("Ingrese la opcion: ");
-    string opcion = Console.ReadLine();
-
-    if (int.TryParse(opcion, out int opc) && opc < 7 && opc > 0)
+    Console.WriteLine($"----Empleado {i+1}----");
+    arreglo[i] = new Empleado();
+    Console.Write("Ingrese nombre: ");
+    arreglo[i].Nombre = Console.ReadLine();
+    Console.Write("Ingrese apellido: ");
+    arreglo[i].Apellido = Console.ReadLine();
+    Console.Write("Fecha de nacimiento (dd/mm/aaaa): ");
+    if (DateTime.TryParseExact(Console.ReadLine(),"dd/MM/yyyy",null, System.Globalization.DateTimeStyles.None,out DateTime fecha))
     {
-        if (opc != 5 && opc != 6)
-        {
-            Console.Write("Ingrese el numero: ");
-            if (double.TryParse(Console.ReadLine(), out double numero))
-            {
-                switch (opc)
-                {
-                    case 1:
-                        prueba.Sumar(numero);
-                        Console.WriteLine($"Despues de sumar queda: {prueba.Resultado} ");
-                        break;
-
-                    case 2:
-                        prueba.Restar(numero);
-                        Console.WriteLine($"Despues de restar queda: {prueba.Resultado} ");
-                        break;
-
-                    case 3:
-                        prueba.Multiplicar(numero);
-                        Console.WriteLine($"Despues de multiplicar queda: {prueba.Resultado} ");
-                        break;
-
-                    case 4:
-                        prueba.Dividir(numero);
-                        if (numero != 0)
-                        {
-                            Console.WriteLine($"Despues de dividir queda: {prueba.Resultado} ");
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                Console.WriteLine("ERROR");
-            }
-        }
-        else
-        {
-            switch (opc)
-            {
-                case 5:
-                    prueba.Limpiar();
-                    Console.WriteLine($"Despues de limpiar queda: {prueba.Resultado} ");
-                    break;
-
-                case 6:
-                    continuar = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    else
-    {
+        arreglo[i].FechaNac = fecha;
+    }else{
         Console.WriteLine("ERROR");
     }
+    Console.Write("Estado civil (c: casado, s:soltero): ");
+    if (char.TryParse(Console.ReadLine(),out char dato))
+    {
+        arreglo[i].EstadoCivil = dato;
+    }
+    Console.Write("Fecha de ingreso (dd/mm/aaaa): ");
+        if (DateTime.TryParseExact(Console.ReadLine(),"dd/MM/yyyy",null, System.Globalization.DateTimeStyles.None,out DateTime fecha2))
+    {
+        arreglo[i].FechaIng = fecha2;
+    }else{
+        Console.WriteLine("ERROR");
+    }
+    Random random2 = new Random();
+    arreglo[i].SueldoBasico = random2.Next(300000, 1000000);
+    
+    Random random = new Random();
+    arreglo[i].Cargo = (Cargos)random.Next(0, 5);
 }
-
-Console.WriteLine($"Resultado Final: {prueba.Resultado}");
-
-
-
-
-
+for (int i = 0; i < arreglo.Length; i++)
+{
+    Console.WriteLine($"--Empleado nro {i+1}--");
+    arreglo[i].mostrar();
+    Console.WriteLine("");
+}
+int auxMayor = 0;
+int indice = 0;
+for (int a = 0; a < arreglo.Length; a++)
+{
+    if (arreglo[a].edades() > auxMayor)
+    {
+        auxMayor = arreglo[a].edades();
+        indice = a;
+    }
+}
+Console.WriteLine("");
+Console.WriteLine("EMPLEADO MAS VIEJO");
+arreglo[indice].mostrar();
